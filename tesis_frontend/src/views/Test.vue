@@ -77,7 +77,13 @@ export default {
             let convertedDate = new Date(dateString);
             return convertedDate.toDateString();
         },
+        async obtenerOfertas() {
+            let r = await axios.get('http://localhost:3632/ofertas');
+            console.log("DATA: ", r.data);
+        },
         getInitialUsers() {
+
+            
             axios.get(`https://randomuser.me/api/?results=5`).then((response) => {
                 this.users = response.data.results;
             });
@@ -100,6 +106,7 @@ export default {
     },
     mounted() {
         this.getNextUser();
+        this.obtenerOfertas();
     }
 }
 </script>
