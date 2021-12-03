@@ -63,12 +63,14 @@
 </style>
 
 <script>
+
 import axios from "axios";
 
 export default {
     data() {
         return {
             users: [],
+            correo: 'gprobin0@si.edu',
             cargarDatos: false,
         };
     },
@@ -77,10 +79,7 @@ export default {
             let convertedDate = new Date(dateString);
             return convertedDate.toDateString();
         },
-        async obtenerOfertas() {
-            let r = await axios.get('http://localhost:3632/ofertas');
-            console.log("DATA: ", r.data);
-        },
+        
         getInitialUsers() {
 
             
@@ -106,7 +105,6 @@ export default {
     },
     mounted() {
         this.getNextUser();
-        this.obtenerOfertas();
     }
 }
 </script>
