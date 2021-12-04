@@ -46,6 +46,8 @@ export default {
         }
     },
     methods: {
+
+        //Ofertas de recomendación
         async obtenerOfertas() {
             this.cargarDatos = true;
             const resp = await ofertaServicio.obtenerRecomendaciones(this.correo, this.pagina, this.tamanio);
@@ -55,14 +57,14 @@ export default {
 
             console.log("DatosRecomendacion: ", resp.data);
         },
-        async obtenerOfertasQuery(query){
-            this.cargarDatos = true;
-            const resp = await ofertaServicio.obtenerOfertasQuery(this.correo, this.pagina, this.tamanio, query);
-            this.ofertas = resp.data;
-            this.pagina += 1;
-            this.cargarDatos = false;
-
-            console.log("DatosQuery: ", resp.data);
+        ponerScrollInfinitoRecomendacion: function () {
+            window.addEventListener('scroll', this.recargarOfertas);
+        },
+        quitarScrollInfinitoRecomendacion: function (final) {
+            window.removeEventListener('scroll', this.recargarOfertas);
+            if (final) {
+                this.finalDatos = true;
+            }
         },
         async recargarOfertas() {
             //Comprobación de si se está en el inferior de la página
@@ -78,8 +80,8 @@ export default {
                 //Si no hay datos, se quita este evento para siempre
                 if (status === 204) {
                     this.quitarScrollInfinitoRecomendacion(true);
-                //Si hay datos, se colocan en la lista de ofertas y se vuelve a poner el evento
-                } else if(status === 200){
+                    //Si hay datos, se colocan en la lista de ofertas y se vuelve a poner el evento
+                } else if (status === 200) {
                     this.ofertas.push(...ofertas);
                     this.pagina += 1;
                     this.ponerScrollInfinitoRecomendacion(false);
@@ -87,13 +89,47 @@ export default {
                 this.cargarDatos = false;
             }
         },
-        ponerScrollInfinitoRecomendacion: function () {
-            window.addEventListener('scroll', this.recargarOfertas);
+
+        //Ofertas query
+        async obtenerOfertasQuery(query) {
+            this.cargarDatos = true;
+            const resp = await ofertaServicio.obtenerOfertasQuery(this.correo, this.pagina, this.tamanio, query);
+            this.ofertas = resp.data;
+            this.pagina += 1;
+            this.cargarDatos = false;
+
+            console.log("DatosQuery: ", resp.data);
         },
-        quitarScrollInfinitoRecomendacion: function (final) {
-            window.removeEventListener('scroll', this.recargarOfertas);
-            if (final){
+        ponerScrollInfinitoQuery: function () {
+            window.addEventListener('scroll', this.recargarOfertasQuery);
+        },
+        quitarScrollInfinitoQuery: function (final) {
+            window.removeEventListener('scroll', this.recargarOfertasQuery);
+            if (final) {
                 this.finalDatos = true;
+            }
+        },
+        async recargarOfertasQuery() {
+            //Comprobación de si se está en el inferior de la página
+            let limiteInferior = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+            if (limiteInferior) {
+                //Si está, se empiezan a traer datos.
+                this.cargarDatos = true;
+                //Se quita el evento por tema de bugs (ya que esta función se puede ejecutar más de una vez)
+                this.quitarScrollInfinitoQuery(false);
+                const resp = await ofertaServicio.obtenerRecomendaciones(this.correo, this.pagina, this.tamanio);
+                const ofertas = resp.data;
+                const status = resp.status;
+                //Si no hay datos, se quita este evento para siempre
+                if (status === 204) {
+                    this.quitarScrollInfinitoQuery(true);
+                    //Si hay datos, se colocan en la lista de ofertas y se vuelve a poner el evento
+                } else if (status === 200) {
+                    this.ofertas.push(...ofertas);
+                    this.pagina += 1;
+                    this.ponerScrollInfinitoQuery(false);
+                }
+                this.cargarDatos = false;
             }
         },
         formatearFecha: function (fecha) {
@@ -111,10 +147,11 @@ export default {
     },
     mounted() {
         const query = this.$route.query.query;
-        if(query){
+        if (query) {
+            this.titulo = 'Resultados para : "' + query + '"';
+            this.ponerScrollInfinitoQuery();
             this.obtenerOfertasQuery(query);
-        }
-        else{
+        } else {
             this.ponerScrollInfinitoRecomendacion();
             this.obtenerOfertas();
         }
