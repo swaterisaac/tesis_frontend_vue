@@ -81,8 +81,6 @@ export default {
         },
         
         getInitialUsers() {
-
-            
             axios.get(`https://randomuser.me/api/?results=5`).then((response) => {
                 this.users = response.data.results;
             });

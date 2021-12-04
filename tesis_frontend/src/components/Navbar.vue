@@ -21,13 +21,15 @@
                 placeholder="Busca ofertas turísticas"
                 background-color="#fff"
                 class="pt-5"
-                rounded></v-text-field>
+                rounded
+                v-model="query"></v-text-field>
         </v-responsive>
         <div class="px-2">
             <v-btn
                 rounded
                 color="secundario"
-                class="white--text">Buscar</v-btn>
+                class="white--text"
+                @click="ejecutarQuery">Buscar</v-btn>
         </div>
 
         <v-btn
@@ -57,15 +59,25 @@
 <script>
 export default {
     name: "Navbar",
+    data(){
+        return{
+            query: this.$route.query.query,
+        }
+    },
     methods: {
         goHome: function () {
             this.$router.push("/");
+            location.reload();
         },
         goTest: function () {
             this.$router.push("/test");
         },
         goProfile: function () {
             this.$router.push("/profile");
+        },
+        ejecutarQuery: function () {
+            this.$router.push({ path: '/', query: { query: this.query }})
+            location.reload();
         },
     },
 };
