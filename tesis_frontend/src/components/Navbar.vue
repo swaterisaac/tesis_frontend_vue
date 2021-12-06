@@ -66,17 +66,17 @@ export default {
     },
     methods: {
         goHome: function () {
-            this.$router.push("/");
+            this.$router.push("/").catch(() => {});
             location.reload();
         },
         goTest: function () {
-            this.$router.push("/test");
+            this.$router.push("/test").catch(() => {});
         },
         goProfile: function () {
-            this.$router.push("/profile");
+            this.$router.push("/profile").catch(() => {});
         },
         ejecutarQuery: function () {
-            this.$router.push({ path: '/', query: { query: this.query }})
+            this.$router.push({ path: '/', query: { query: this.query }}).catch(() => {});
             location.reload();
         },
     },

@@ -3,7 +3,10 @@
         <v-row class="d-flex justify-center pt-4">
             <p class="display-2">Registro</p>
         </v-row>
-        <v-form>
+        <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation>
             <v-row justify="center">
                 <v-col
                     cols="12"
@@ -15,19 +18,52 @@
                         filled
                         color="#000"
                         background-color="#fff"
-                        label="Nombre completo"></v-text-field>
+                        prepend-icon="mdi-account"
+                        label="Nombre completo"
+                        :rules="reglasNombre"
+                        v-model="nombreCompleto"></v-text-field>
                     <v-text-field
                         rounded
                         filled
                         color="#000"
                         background-color="#fff"
+                        prepend-icon="mdi-email"
+                        :value="correo"
+                        :disabled="true"
+                        :loading="cargarUsuario"
+                        :rules="reglasCorreo"
                         label="Correo"></v-text-field>
-                    <v-text-field
-                        rounded
-                        filled
-                        color="#000"
-                        background-color="#fff"
-                        label="Fecha de nacimiento"></v-text-field>
+                    <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                                rounded
+                                filled
+                                color="#000"
+                                background-color="#fff"
+                                v-model="fechaNacimientoFormateada"
+                                label="Fecha de nacimiento"
+                                prepend-icon="mdi-calendar"
+                                readonly
+                                :rules="reglasFechaNacimiento"
+                                v-bind="attrs"
+                                v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker
+                            color="rojizo"
+                            v-model="fechaNacimiento"
+                            :active-picker.sync="activePicker"
+                            :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+                            min="1900-01-01"
+                            locale="es-CL"
+                            @change="save"></v-date-picker>
+                    </v-menu>
+
                     <v-select
                         rounded
                         filled
@@ -35,9 +71,11 @@
                         background-color="#fff"
                         :items="regiones"
                         item-text="nombre"
+                        prepend-icon="mdi-map-marker"
                         return-object
-                        v-model="datosRegistro.region"
+                        v-model="region"
                         @change="traerComunas()"
+                        :rules="reglasRegion"
                         label="Región"></v-select>
                     <v-select
                         rounded
@@ -48,50 +86,124 @@
                         :disabled="deshabilitarComunas"
                         :items="comunas"
                         item-text="nombre"
+                        prepend-icon="mdi-map-marker"
                         return-object
-                        v-model="datosRegistro.comuna"
+                        v-model="comuna"
+                        :rules="reglasComuna"
                         :label="tituloComuna"></v-select>
+                    <v-flex class="d-flex justify-end">
+                        <v-btn
+                            :disabled="!valid"
+                            color="terciario"
+                            class="mr-4"
+                            @click="registrarse">
+                            Registrarse
+                        </v-btn>
+                    </v-flex>
                 </v-col>
             </v-row>
         </v-form>
-
     </v-flex>
 </template>
 
 <script>
 import ubicacionServicio from '../service/ubicacionServicio';
+import {
+    getAuth
+} from 'firebase/auth';
+const auth = getAuth();
 export default {
     name: "Registro",
-    data(){
-        return{
+    data() {
+        return {
+            //Cargas y activaciones
+            cargarUsuario: true,
+            cargarComunas: false,
+            deshabilitarComunas: true,
+
+            //Datos helpers
+            tituloComuna: "Comuna (Seleccione una región primero)",
+            activePicker: null,
+            valid: false,
+            menu: false,
+
+            //Datos necesarios
             regiones: [],
             comunas: [],
-            tituloComuna: "Comuna (Seleccione una región primero)",
-            deshabilitarComunas: true,
-            cargarComunas: false,
-            datosRegistro: {
-                nombreCompleto: '',
-                region: '',
-                comuna: '',
-                correo: '',
-            }
+
+            //Datos de registro
+            nombreCompleto: '',
+            region: '',
+            comuna: '',
+            fechaNacimiento: null,
+            fechaNacimientoFormateada: null,
+            correo: '',
+
+            //Reglas
+            reglasNombre: [
+                v => !!v || 'Debe ingresar su nombre completo.',
+                v => !!v && v.length < 150 || 'Su nombre debe ser de menos de 150 carácteres',
+            ],
+            reglasCorreo: [
+                v => !!v || 'Debe ingresar su correo',
+                v => /.+@.+\..+/.test(v) || 'El correo debe tener el formato nombre@gmail.com',
+            ],
+            reglasFechaNacimiento: [
+                v => !!v || 'Debe ingresar su fecha de nacimiento',
+            ],
+            reglasRegion: [
+                v => !!v || 'Debe ingresar una región',
+            ],
+            reglasComuna: [
+                v => !!v || 'Debe ingresar una comuna',
+            ],
         }
     },
     async mounted() {
+        // auth.onAuthStateChanged(usuario => {
+        //     if (usuario) {
+        //         this.correo = usuario.email;
+        //         this.cargarUsuario = false;
+        //     }
+        // });
+        this.email = auth.currentUser.email
         const respRegiones = await ubicacionServicio.obtenerRegiones();
         this.regiones = respRegiones.data;
         console.log(this.regiones);
     },
-    methods:{
-        async traerComunas(){
+    methods: {
+        async traerComunas() {
             this.cargarComunas = true;
-            const respComunas = await ubicacionServicio.obtenerComunas(this.datosRegistro.region.id);
+            const respComunas = await ubicacionServicio.obtenerComunas(this.region.id);
             this.comunas = respComunas.data;
             console.log(this.comunas);
             this.deshabilitarComunas = false;
             this.cargarComunas = false;
             this.tituloComuna = "Comuna";
-        }
+        },
+        prueba() {
+            const auth = getAuth();
+            const usuario = auth.currentUser;
+            console.log(usuario);
+        },
+        save(fechaNacimiento) {
+            this.$refs.menu.save(fechaNacimiento);
+            this.fechaNacimientoFormateada = this.formatearFecha(fechaNacimiento);
+        },
+        formatearFecha(fecha) {
+            let [anio, mes, dia] = fecha.split("-");
+            return dia + "-" + mes + "-" + anio;
+        },
+        registrarse() {
+            if(this.$refs.form.validate()){
+                console.log("Bloque del registro");
+            }
+        },
+    },
+    watch: {
+        menu(val) {
+            val && setTimeout(() => (this.activePicker = 'YEAR'))
+        },
     },
 }
 </script>

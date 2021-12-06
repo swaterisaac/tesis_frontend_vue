@@ -28,10 +28,10 @@ export default {
                     const res = await usuarioServicio.obtenerUsuarioPorCorreo(user.email);
                     const status = res.status;
                     if(status === 204){
-                        this.$router.push('/registro');
+                        this.$router.push('/registro').catch(() => {});
                     }
                     else if(status === 200){
-                        this.$router.push('/');
+                        this.$router.push('/').catch(() => {});
                     }
                     console.log(user);
                 }).catch((error) => {
