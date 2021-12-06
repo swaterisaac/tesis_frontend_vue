@@ -108,12 +108,10 @@
 
 <script>
 import ubicacionServicio from '../service/ubicacionServicio';
-import {
-    getAuth
-} from 'firebase/auth';
-const auth = getAuth();
+
 export default {
     name: "Registro",
+    props: ['usuarioApp', 'usuarioFirebase'],
     data() {
         return {
             //Cargas y activaciones
@@ -160,13 +158,9 @@ export default {
         }
     },
     async mounted() {
-        // auth.onAuthStateChanged(usuario => {
-        //     if (usuario) {
-        //         this.correo = usuario.email;
-        //         this.cargarUsuario = false;
-        //     }
-        // });
-        this.email = auth.currentUser.email
+        
+        this.correo = this.usuarioFirebase.email;
+        this.cargarUsuario = false;
         const respRegiones = await ubicacionServicio.obtenerRegiones();
         this.regiones = respRegiones.data;
         console.log(this.regiones);
@@ -181,11 +175,6 @@ export default {
             this.cargarComunas = false;
             this.tituloComuna = "Comuna";
         },
-        prueba() {
-            const auth = getAuth();
-            const usuario = auth.currentUser;
-            console.log(usuario);
-        },
         save(fechaNacimiento) {
             this.$refs.menu.save(fechaNacimiento);
             this.fechaNacimientoFormateada = this.formatearFecha(fechaNacimiento);
@@ -196,6 +185,11 @@ export default {
         },
         registrarse() {
             if(this.$refs.form.validate()){
+                console.log("Nombre: ", this.nombreCompleto);
+                console.log("Correo: ", this.correo);
+                console.log("Fecha nacimiento: ", this.fechaNacimiento, this.fechaNacimientoFormateada);
+                console.log("Region: ", this.region.nombre);
+                console.log("Comuna: ", this.comuna.nombre);
                 console.log("Bloque del registro");
             }
         },

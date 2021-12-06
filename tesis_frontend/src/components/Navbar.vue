@@ -22,27 +22,33 @@
                 background-color="#fff"
                 class="pt-5"
                 rounded
-                v-model="query"></v-text-field>
+                v-model="query"
+                v-if="login"></v-text-field>
         </v-responsive>
-        <div class="px-2">
+        <div class="px-2" v-if="login">
             <v-btn
                 rounded
                 color="secundario"
                 class="white--text"
-                @click="ejecutarQuery">Buscar</v-btn>
+                @click="ejecutarQuery"
+                >Buscar</v-btn>
         </div>
 
         <v-btn
             text
             @click="goProfile"
-            color="#fff">
+            color="#fff"
+            v-if="login"
+            >
             <v-icon large left>mdi-account</v-icon>
             <span class="mr-2">Ver tu perfil</span>
         </v-btn>
         <v-btn
             text
             @click="goTest"
-            color="#fff">
+            color="#fff"
+            v-if="login"
+            >
             <v-icon large left>mdi-logout</v-icon>
             <span class="mr-2">Cerrar sesión</span>
         </v-btn>
@@ -57,11 +63,20 @@
 </template>
 
 <script>
+
+
 export default {
     name: "Navbar",
-    data(){
-        return{
+    data() {
+        return {
+            login: false,
             query: this.$route.query.query,
+        }
+    },
+    props: ['usuarioApp', 'usuarioFirebase'],
+    mounted() {
+        if(this.usuarioApp && this.usuarioFirebase){
+            this.login = true;
         }
     },
     methods: {
@@ -70,13 +85,19 @@ export default {
             location.reload();
         },
         goTest: function () {
-            this.$router.push("/test").catch(() => {});
+            console.log(this.usuarioFirebase, this.usuarioApp);
+            //this.$router.push("/test").catch(() => {});
         },
         goProfile: function () {
             this.$router.push("/profile").catch(() => {});
         },
         ejecutarQuery: function () {
-            this.$router.push({ path: '/', query: { query: this.query }}).catch(() => {});
+            this.$router.push({
+                path: '/',
+                query: {
+                    query: this.query
+                }
+            }).catch(() => {});
             location.reload();
         },
     },

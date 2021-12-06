@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import { getAuth } from 'firebase/auth';
-
+// import { initializeApp } from 'firebase/app';
+// import firebaseConfig from '../firestoreKey';
+// initializeApp(firebaseConfig);
 Vue.use(VueRouter)
 
 
@@ -41,7 +43,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const auth = getAuth();  
+  const auth = getAuth();
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = auth.currentUser;
   if (requiresAuth && !isAuthenticated) {
