@@ -24,7 +24,9 @@
             <v-btn
                 class="d-flex align-center"
                 color="terciario"
-                rounded>
+                rounded
+                @click="detalleOferta"
+                >
                 Ver detalle de la oferta
             </v-btn>
         </v-card-actions>
@@ -36,6 +38,10 @@ const sinFecha = "Sin fecha definida";
 export default {
     name: "Oferta",
     props: {
+        idOferta: {
+            type: Number,
+            default: 0,
+        },
         titulo: {
             type: String,
             default: "<Oferta sin título>",
@@ -73,7 +79,9 @@ export default {
 
     }),
     methods: {
-
+        detalleOferta(){
+            this.$router.push("/detalleOferta/" + this.idOferta);
+        }
     }
 }
 </script>

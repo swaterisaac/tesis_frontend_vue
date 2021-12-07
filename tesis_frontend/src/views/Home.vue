@@ -7,6 +7,7 @@
                 v-for="oferta in ofertas"
                 :key="oferta.id">
                 <oferta
+                    :idOferta="oferta.id"
                     :titulo="oferta.nombre"
                     :comuna="oferta.comuna"
                     :region="oferta.region"
@@ -25,6 +26,9 @@ import ofertaServicio from "../service/ofertaServicio"
 import Oferta from '../components/Oferta'
 import CirculoDeCarga from '../components/CirculoDeCarga.vue';
 import SinDatos from '../components/SinDatos.vue';
+import {
+    formatearFechaDB
+} from '../helpers/fecha';
 
 export default {
     name: 'Home',
@@ -33,11 +37,12 @@ export default {
         CirculoDeCarga,
         SinDatos,
     },
+    props: ['usuarioApp', 'usuarioFirebase'],
     data() {
         return {
             titulo: 'Recomendaciones para ti',
             ofertas: [],
-            correo: 'wfilppetti1@reuters.com',
+            correo: '',
             cargarDatos: false,
             finalDatos: false,
             mensajeFinal: "No tienes más recomendaciones. ¡Prueba a buscar algo!",
@@ -46,7 +51,6 @@ export default {
         }
     },
     methods: {
-
         //Ofertas de recomendación
         async obtenerOfertas() {
             this.cargarDatos = true;
@@ -133,20 +137,12 @@ export default {
             }
         },
         formatearFecha: function (fecha) {
-            let fechaFormateada = new Date(fecha);
-            let dia = fechaFormateada.getDate();
-            if (dia < 10) {
-                dia = "0" + dia;
-            }
-            let mes = fechaFormateada.getMonth();
-            if (mes < 10) {
-                mes = "0" + mes;
-            }
-            return dia + "-" + mes + "-" + fechaFormateada.getFullYear();
+            return formatearFechaDB(fecha);
         }
     },
     mounted() {
         const query = this.$route.query.query;
+        this.correo = this.usuarioApp.correo;
         if (query) {
             this.titulo = 'Resultados para : "' + query + '"';
             this.ponerScrollInfinitoQuery();
@@ -155,7 +151,6 @@ export default {
             this.ponerScrollInfinitoRecomendacion();
             this.obtenerOfertas();
         }
-        console.log(this.$route.query.query)
     }
 }
 </script>

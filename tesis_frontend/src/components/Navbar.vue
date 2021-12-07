@@ -30,25 +30,22 @@
                 rounded
                 color="secundario"
                 class="white--text"
-                @click="ejecutarQuery"
-                >Buscar</v-btn>
+                @click="ejecutarQuery">Buscar</v-btn>
         </div>
 
         <v-btn
             text
             @click="goProfile"
             color="#fff"
-            v-if="login"
-            >
+            v-if="login">
             <v-icon large left>mdi-account</v-icon>
             <span class="mr-2">Ver tu perfil</span>
         </v-btn>
         <v-btn
             text
-            @click="goTest"
+            @click="cerrarSesion"
             color="#fff"
-            v-if="login"
-            >
+            v-if="login">
             <v-icon large left>mdi-logout</v-icon>
             <span class="mr-2">Cerrar sesión</span>
         </v-btn>
@@ -63,8 +60,7 @@
 </template>
 
 <script>
-
-
+import { getAuth, signOut } from 'firebase/auth';
 export default {
     name: "Navbar",
     data() {
@@ -75,7 +71,7 @@ export default {
     },
     props: ['usuarioApp', 'usuarioFirebase'],
     mounted() {
-        if(this.usuarioApp && this.usuarioFirebase){
+        if (this.usuarioApp && this.usuarioFirebase) {
             this.login = true;
         }
     },
@@ -90,6 +86,14 @@ export default {
         },
         goProfile: function () {
             this.$router.push("/profile").catch(() => {});
+        },
+        cerrarSesion: function () {
+            const auth = getAuth();
+            signOut(auth).then(() => {
+                window.location.href = "/login";
+            }).catch(error => {
+                console.log(error);
+            });
         },
         ejecutarQuery: function () {
             this.$router.push({

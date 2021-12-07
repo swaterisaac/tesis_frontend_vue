@@ -33,6 +33,19 @@ class OfertaServicio{
             console.log(error);
         }
     }
+    obtenerOfertaPorId(idOferta){
+        try{
+            const res = axiosBackend.get('obtenerOfertaPorId',{
+                params:{
+                    idOferta: idOferta,
+                }
+            });
+            return res;
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
 }
 
 const ofertaServicio = new OfertaServicio();

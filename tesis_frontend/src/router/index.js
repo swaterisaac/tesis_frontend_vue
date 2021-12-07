@@ -2,11 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import { getAuth } from 'firebase/auth';
-// import { initializeApp } from 'firebase/app';
-// import firebaseConfig from '../firestoreKey';
-// initializeApp(firebaseConfig);
-Vue.use(VueRouter)
 
+Vue.use(VueRouter)
 
 const routes = [
   {
@@ -26,6 +23,14 @@ const routes = [
     path: '/registro',
     name: 'Registro',
     component: () => import('../views/Registro.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/detalleOferta/:idOferta',
+    name: 'DetalleOferta',
+    component: () => import('../views/DetalleOferta.vue'),
     meta: {
       requiresAuth: true,
     }

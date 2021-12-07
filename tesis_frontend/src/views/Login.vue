@@ -29,7 +29,7 @@ export default {
                     if (status === 204) {
                         this.$router.push('/registro').catch(() => {});
                     } else if (status === 200) {
-                        this.$router.push('/').catch(() => {});
+                        window.location.href = "/";
                     }
                     console.log(user);
                 }).catch((error) => {
