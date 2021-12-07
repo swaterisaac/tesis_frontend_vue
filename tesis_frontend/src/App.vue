@@ -37,6 +37,9 @@ export default {
             if (resp.status === 200) {
                 this.usuarioApp = resp.data;
             }
+            else if(resp.status === 204){
+                this.$router.push("/registro");
+            }
         }
         this.appCreated = true;
     },

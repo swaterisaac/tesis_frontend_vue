@@ -3,6 +3,9 @@
         <v-row class="d-flex justify-center pt-4">
             <p class="display-2">Registro</p>
         </v-row>
+        <v-row class="d-flex justify-center pt-4" v-if="servidorError">
+            <p class="body-1 red--text text--darken-3">Error con el servidor, por favor, intente más tarde</p>
+        </v-row>
         <v-form
             ref="form"
             v-model="valid"
@@ -86,11 +89,25 @@
                         :disabled="deshabilitarComunas"
                         :items="comunas"
                         item-text="nombre"
+                        item-value="id"
                         prepend-icon="mdi-map-marker"
-                        return-object
                         v-model="comuna"
                         :rules="reglasComuna"
                         :label="tituloComuna"></v-select>
+                    <v-autocomplete
+                        rounded
+                        filled
+                        color="#000"
+                        background-color="#fff"
+                        prepend-icon="mdi-medical-bag"
+                        chips
+                        deletable-chips
+                        multiple
+                        :items="consideraciones"
+                        v-model="consideracionesMedicas"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Buscar consideraciones médicas"></v-autocomplete>
                     <v-flex class="d-flex justify-end">
                         <v-btn
                             :disabled="!valid"
@@ -108,6 +125,8 @@
 
 <script>
 import ubicacionServicio from '../service/ubicacionServicio';
+import consideracionesServicio from '../service/consideracionesServicio';
+import usuarioServicio from '../service/usuarioServicio';
 
 export default {
     name: "Registro",
@@ -124,10 +143,12 @@ export default {
             activePicker: null,
             valid: false,
             menu: false,
+            servidorError: false,
 
             //Datos necesarios
             regiones: [],
             comunas: [],
+            consideraciones: [],
 
             //Datos de registro
             nombreCompleto: '',
@@ -136,6 +157,7 @@ export default {
             fechaNacimiento: null,
             fechaNacimientoFormateada: null,
             correo: '',
+            consideracionesMedicas: [],
 
             //Reglas
             reglasNombre: [
@@ -158,12 +180,19 @@ export default {
         }
     },
     async mounted() {
-        
+        if(this.usuarioApp){
+            this.$router.push("/");
+        }
         this.correo = this.usuarioFirebase.email;
         this.cargarUsuario = false;
+
         const respRegiones = await ubicacionServicio.obtenerRegiones();
         this.regiones = respRegiones.data;
+
+        const respConsideraciones = await consideracionesServicio.obtenerConsideracionesMedicas();
+        this.consideraciones = respConsideraciones.data;
         console.log(this.regiones);
+        console.log(this.consideraciones);
     },
     methods: {
         async traerComunas() {
@@ -183,14 +212,23 @@ export default {
             let [anio, mes, dia] = fecha.split("-");
             return dia + "-" + mes + "-" + anio;
         },
-        registrarse() {
-            if(this.$refs.form.validate()){
-                console.log("Nombre: ", this.nombreCompleto);
-                console.log("Correo: ", this.correo);
-                console.log("Fecha nacimiento: ", this.fechaNacimiento, this.fechaNacimientoFormateada);
-                console.log("Region: ", this.region.nombre);
-                console.log("Comuna: ", this.comuna.nombre);
-                console.log("Bloque del registro");
+        async registrarse() {
+            if (this.$refs.form.validate()) {
+                const nuevoUsuario = {
+                    'nombre': this.nombreCompleto,
+                    'correo': this.correo,
+                    'fechaNacimiento': this.fechaNacimiento,
+                    'idComuna': this.comuna,
+                    'consideraciones': this.consideracionesMedicas,
+                };
+                const resp = await usuarioServicio.crearUsuario(nuevoUsuario);
+                if(resp.status !== 200){
+                    console.log(resp.data)
+                    this.servidorError = true;
+                }
+                else{
+                    window.location.href = "/";
+                }
             }
         },
     },
@@ -202,6 +240,3 @@ export default {
 }
 </script>
 
-<style>
-
-</style>

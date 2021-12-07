@@ -14,7 +14,6 @@ import {
 import axiosBackend from '../service/axiosServicio';
 import usuarioServicio from '../service/usuarioServicio';
 
-
 const provider = new GoogleAuthProvider();
 const auth = getAuth();
 
@@ -27,10 +26,9 @@ export default {
                     const user = result.user;
                     const res = await usuarioServicio.obtenerUsuarioPorCorreo(user.email);
                     const status = res.status;
-                    if(status === 204){
+                    if (status === 204) {
                         this.$router.push('/registro').catch(() => {});
-                    }
-                    else if(status === 200){
+                    } else if (status === 200) {
                         this.$router.push('/').catch(() => {});
                     }
                     console.log(user);
@@ -38,12 +36,22 @@ export default {
                     console.log(error);
                 });
         },
-        testPost(){
-            const prueba = new URLSearchParams();
-            prueba.append('nombre', 'Juan');
-            prueba.append('consideraciones', ['1','2','3']);
-            
-            axiosBackend.post('crearUsuario', prueba)
+        async testPost() {
+            const prueba2 = {
+                'nombre': 'juan',
+                'correo': 'a@example.com',
+                'fechaNacimiento': '2000-03-29',
+                'idComuna': 9,
+                'consideraciones': [1,2,3],
+            }
+            try {
+                const resp = await axiosBackend.post('crearUsuario', prueba2)
+                console.log(resp.status);
+                console.log(resp.data);
+            } catch (error) {
+                console.log(error);
+            }
+
         }
     },
 }

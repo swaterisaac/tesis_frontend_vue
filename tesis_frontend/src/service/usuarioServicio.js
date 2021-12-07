@@ -14,6 +14,11 @@ class UsuarioServicio{
             console.log(error);
         }
     }
+    
+    crearUsuario(usuario){
+        const resp = axiosBackend.post('crearUsuario', usuario);
+        return resp;
+    }
 }
 
 const usuarioServicio = new UsuarioServicio();
