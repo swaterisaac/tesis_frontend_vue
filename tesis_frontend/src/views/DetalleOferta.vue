@@ -46,16 +46,19 @@
 
 <script>
 import ofertaServicio from '../service/ofertaServicio';
+import historialServicio from '../service/historialServicio';
 import {
     formatearFechaDB
 } from '../helpers/fecha';
 export default {
     name: "DetalleOferta",
+    props: ['usuarioApp'],
     async created() {
         const idOferta = this.$route.params.idOferta;
         const resp = await ofertaServicio.obtenerOfertaPorId(idOferta)
         if (resp.status === 200) {
             this.oferta = resp.data;
+            await historialServicio.crearHistoriales(this.usuarioApp.correo, Number(idOferta));
             console.log(this.oferta);
         } else {
             this.existeOferta = false;

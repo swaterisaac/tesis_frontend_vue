@@ -29,6 +29,7 @@ import SinDatos from '../components/SinDatos.vue';
 import {
     formatearFechaDB
 } from '../helpers/fecha';
+import historialServicio from '../service/historialServicio';
 
 export default {
     name: 'Home',
@@ -140,13 +141,15 @@ export default {
             return formatearFechaDB(fecha);
         }
     },
-    mounted() {
+    async mounted() {
         const query = this.$route.query.query;
         this.correo = this.usuarioApp.correo;
         if (query) {
             this.titulo = 'Resultados para : "' + query + '"';
             this.ponerScrollInfinitoQuery();
             this.obtenerOfertasQuery(query);
+            await historialServicio.crearHistorialBusqueda(this.correo, query);
+
         } else {
             this.ponerScrollInfinitoRecomendacion();
             this.obtenerOfertas();
