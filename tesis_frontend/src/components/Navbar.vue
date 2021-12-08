@@ -85,7 +85,7 @@ export default {
             //this.$router.push("/test").catch(() => {});
         },
         goProfile: function () {
-            this.$router.push("/profile").catch(() => {});
+            this.$router.push("/perfil").catch(() => {});
         },
         cerrarSesion: function () {
             const auth = getAuth();
