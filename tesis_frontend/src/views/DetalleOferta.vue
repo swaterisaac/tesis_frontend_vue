@@ -4,7 +4,8 @@
             <v-flex class="pb-6">
                 <v-btn @click="volver" v-if="false">
                     <v-icon>mdi-arrow-left</v-icon>
-                    Volver</v-btn>
+                    Volver
+                </v-btn>
                 <p class="text-center display-2">Oferta turística {{oferta.nombre}}</p>
             </v-flex>
             <v-row>
@@ -33,6 +34,34 @@
                             <p class="text-center headline text-decoration-underline font-weight-bold">General</p>
                             <p class="text-left title font-weight-regular"><b>Precio: </b>{{oferta.precio}}</p>
                             <p class="text-left title font-weight-regular"><b>Proveedor: </b>{{oferta.proveedor}}</p>
+                        </v-card>
+                    </v-card>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12">
+                    <v-card
+                        class="pa-4"
+                        outlined
+                        shaped
+                        color="terciario">
+                        <v-card
+                            class="pa-4"
+                            outlined
+                            shaped
+                            color="fondo">
+                            <v-row>
+                                <v-col cols="12">
+                                    <p class="text-center headline text-decoration-underline font-weight-bold">Contacto</p>
+                                </v-col>
+                                <v-col cols="6">
+                                    <p class="text-left title font-weight-regular"><b>Página: </b><a>{{oferta.pagina ? oferta.pagina : 'Sin página'}}</a></p>
+                                    <p class="text-left title font-weight-regular"><b>Teléfono: </b>{{oferta.telefono ? oferta.telefono : 'Sin teléfono'}}</p>
+                                </v-col>
+                                <v-col cols="6">
+                                    <p class="text-left title font-weight-regular"><b>Correo: </b>{{oferta.correo ? oferta.correo : 'Sin correo'}}</p>
+                                </v-col>
+                            </v-row>
                         </v-card>
                     </v-card>
                 </v-col>
@@ -71,11 +100,11 @@ export default {
             existeOferta: true,
         }
     },
-    methods:{
-        formatearFecha(fecha){
+    methods: {
+        formatearFecha(fecha) {
             return formatearFechaDB(fecha);
         },
-        volver(){
+        volver() {
             this.$router.go(-1)
         }
     }
