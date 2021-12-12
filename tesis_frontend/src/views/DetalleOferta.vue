@@ -34,6 +34,13 @@
                             <p class="text-center headline text-decoration-underline font-weight-bold">General</p>
                             <p class="text-left title font-weight-regular"><b>Precio: </b>{{oferta.precio}}</p>
                             <p class="text-left title font-weight-regular"><b>Proveedor: </b>{{oferta.proveedor}}</p>
+                            <p class="text-left title font-weight-regular"><b>Consideraciones Médicas:</b></p>
+                            <ol v-if="existenConsideraciones">
+                                <li v-for="consideracion in consideraciones" :key="consideracion.id">
+                                    <p class="text-left title font-weight-regular">{{consideracion.nombre}}</p>
+                                </li>
+                            </ol>
+                            <p v-else class="text-left title font-weight-regular">Ninguna</p>
                         </v-card>
                     </v-card>
                 </v-col>
@@ -79,9 +86,18 @@ import historialServicio from '../service/historialServicio';
 import {
     formatearFechaDB
 } from '../helpers/fecha';
+import consideracionesServicio from '../service/consideracionesServicio';
 export default {
     name: "DetalleOferta",
     props: ['usuarioApp'],
+    data() {
+        return {
+            oferta: [],
+            consideraciones: [],
+            existeOferta: true,
+            existenConsideraciones: false,
+        }
+    },
     async created() {
         const idOferta = this.$route.params.idOferta;
         const resp = await ofertaServicio.obtenerOfertaPorId(idOferta)
@@ -92,12 +108,10 @@ export default {
         } else {
             this.existeOferta = false;
         }
-
-    },
-    data() {
-        return {
-            oferta: [],
-            existeOferta: true,
+        const respConsideraciones = await consideracionesServicio.obtenerConsideracionesPorOferta(Number(idOferta))
+        if(respConsideraciones.status === 200){
+            this.consideraciones = respConsideraciones.data;
+            this.existenConsideraciones = true;
         }
     },
     methods: {
