@@ -69,7 +69,7 @@ export default {
     },
     computed:{
         ubicacion: function(){
-            return this.comuna + " " + this.region;
+            return this.comuna + ", " + this.region;
         },
         fecha: function(){
             return this.fechaInicio + " al " + this.fechaFinal;

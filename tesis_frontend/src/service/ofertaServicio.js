@@ -17,7 +17,7 @@ class OfertaServicio{
         }
     }
 
-    obtenerOfertasQuery(correo, pagina, tamanio, query){
+    obtenerOfertasQuery(correo, pagina, tamanio, query, filtroComuna, filtroRegion, filtroProveedor){
         try{
             const res = axiosBackend.get('ofertasQuery', {
                 params: {
@@ -25,6 +25,9 @@ class OfertaServicio{
                     pagina: pagina,
                     tamanio: tamanio,
                     query: query,
+                    filtroComuna: filtroComuna,
+                    filtroRegion: filtroRegion,
+                    filtroProveedor: filtroProveedor,
                 }
             });
             return res;
@@ -40,6 +43,15 @@ class OfertaServicio{
                     idOferta: idOferta,
                 }
             });
+            return res;
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+    obtenerProveedores(){
+        try{
+            const res = axiosBackend.get('obtenerProveedores');
             return res;
         }
         catch(error){

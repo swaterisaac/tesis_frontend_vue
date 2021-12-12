@@ -14,7 +14,70 @@
         </v-flex>
 
         <v-spacer></v-spacer>
+        <v-menu
+            v-model="menuFiltro"
+            :close-on-content-click="false"
+            :nudge-width="250"
+            offset-y
+            v-if="login">
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    text
+                    color="#fff"
+                    v-bind="attrs"
+                    v-on="on">
+                    <span class="mr-2">Filtros</span>
+                    <v-icon large right>mdi-filter-variant</v-icon>
+                </v-btn>
+            </template>
 
+            <v-card>
+                <v-card-title>Filtros</v-card-title>
+                <v-flex class="px-4">
+                    <v-autocomplete
+                        rounded
+                        filled
+                        color="#000"
+                        background-color="#fff"
+                        :items="regiones"
+                        item-text="nombre"
+                        prepend-icon="mdi-map-marker"
+                        return-object
+                        v-model="filtroRegion"
+                        @change="traerComunas()"
+                        label="Región"></v-autocomplete>
+                    <v-autocomplete
+                        rounded
+                        filled
+                        color="#000"
+                        background-color="#fff"
+                        :loading="cargarComunas"
+                        :disabled="deshabilitarComunas"
+                        :items="comunas"
+                        item-text="nombre"
+                        prepend-icon="mdi-map-marker"
+                        v-model="filtroComuna"
+                        :label="tituloComuna"></v-autocomplete>
+                    <v-autocomplete
+                        rounded
+                        filled
+                        color="#000"
+                        background-color="#fff"
+                        :items="proveedores"
+                        item-text="nombre"
+                        prepend-icon="mdi-account-supervisor"
+                        v-model="filtroProveedor"
+                        label="Proveedor"></v-autocomplete>
+                </v-flex>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text @click="menuFiltro = false">
+                        Cerrar
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-menu>
         <v-responsive max-width="260">
             <v-text-field
                 append-icon="mdi-magnify"
@@ -60,20 +123,45 @@
 </template>
 
 <script>
-import { getAuth, signOut } from 'firebase/auth';
+import {
+    getAuth,
+    signOut
+} from 'firebase/auth';
+import ubicacionServicio from '../service/ubicacionServicio';
+import ofertaServicio from '../service/ofertaServicio';
 export default {
     name: "Navbar",
     data() {
         return {
             login: false,
             query: this.$route.query.query,
+            tituloComuna: "Comuna (Seleccione una región primero)",
+
+            comunas: [],
+            regiones: [],
+            proveedores: [],
+            filtroComuna: '',
+            filtroRegion: '',
+            filtroProveedor: '',
+
+            cargarComunas: false,
+            deshabilitarComunas: true,
+            menuFiltro: false,
         }
     },
     props: ['usuarioApp', 'usuarioFirebase'],
-    mounted() {
+    async mounted() {
         if (this.usuarioApp && this.usuarioFirebase) {
             this.login = true;
+            //Traer regiones
+            const respRegiones = await ubicacionServicio.obtenerRegiones();
+            this.regiones = respRegiones.data;
+
+            //Traer proveedores
+            const respProveedores = await ofertaServicio.obtenerProveedores();
+            this.proveedores = respProveedores.data;
         }
+
     },
     methods: {
         goHome: function () {
@@ -99,10 +187,28 @@ export default {
             this.$router.push({
                 path: '/',
                 query: {
-                    query: this.query
+                    query: this.query,
+                    filtroComuna: this.filtroComuna,
+                    filtroRegion: this.filtroRegion.nombre,
+                    filtroProveedor: this.filtroProveedor,
                 }
             }).catch(() => {});
             location.reload();
+        },
+        async traerComunas() {
+
+            if (this.filtroRegion) {
+                this.cargarComunas = true;
+                const respComunas = await ubicacionServicio.obtenerComunas(this.filtroRegion.id);
+                this.comunas = respComunas.data;
+
+                this.deshabilitarComunas = false;
+                this.cargarComunas = false;
+                this.tituloComuna = "Comuna";
+            } else {
+                this.comunas = []
+            }
+
         },
     },
 };

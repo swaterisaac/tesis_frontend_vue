@@ -67,7 +67,7 @@
                             @change="save"></v-date-picker>
                     </v-menu>
 
-                    <v-select
+                    <v-autocomplete
                         rounded
                         filled
                         color="#000"
@@ -79,8 +79,8 @@
                         v-model="region"
                         @change="traerComunas()"
                         :rules="reglasRegion"
-                        label="Región"></v-select>
-                    <v-select
+                        label="Región"></v-autocomplete>
+                    <v-autocomplete
                         rounded
                         filled
                         color="#000"
@@ -93,7 +93,7 @@
                         prepend-icon="mdi-map-marker"
                         v-model="comuna"
                         :rules="reglasComuna"
-                        :label="tituloComuna"></v-select>
+                        :label="tituloComuna"></v-autocomplete>
                     <v-autocomplete
                         rounded
                         filled
@@ -197,9 +197,10 @@ export default {
     methods: {
         async traerComunas() {
             this.cargarComunas = true;
+
             const respComunas = await ubicacionServicio.obtenerComunas(this.region.id);
             this.comunas = respComunas.data;
-            console.log(this.comunas);
+
             this.deshabilitarComunas = false;
             this.cargarComunas = false;
             this.tituloComuna = "Comuna";

@@ -41,12 +41,22 @@ export default {
     props: ['usuarioApp', 'usuarioFirebase'],
     data() {
         return {
+            //Mensajes
             titulo: 'Recomendaciones para ti',
-            ofertas: [],
-            correo: '',
-            cargarDatos: false,
-            finalDatos: false,
             mensajeFinal: "No tienes más recomendaciones. ¡Prueba a buscar algo!",
+            tituloComuna: "Comuna (Seleccione una región primero)",
+            //Datos
+            correo: '',
+            ofertas: [],
+            query: '',
+            filtroComuna: '',
+            filtroRegion: '',
+            filtroProveedor: '',
+            //Helpers
+            finalDatos: false,
+            //Cargas y habilitadores
+            cargarDatos: false,
+            //Paginación
             pagina: 1,
             tamanio: 6,
         }
@@ -96,9 +106,9 @@ export default {
         },
 
         //Ofertas query
-        async obtenerOfertasQuery(query) {
+        async obtenerOfertasQuery() {
             this.cargarDatos = true;
-            const resp = await ofertaServicio.obtenerOfertasQuery(this.correo, this.pagina, this.tamanio, query);
+            const resp = await ofertaServicio.obtenerOfertasQuery(this.correo, this.pagina, this.tamanio, this.query, this.filtroComuna, this.filtroRegion, this.filtroProveedor);
             this.ofertas = resp.data;
             this.pagina += 1;
             this.cargarDatos = false;
@@ -122,7 +132,7 @@ export default {
                 this.cargarDatos = true;
                 //Se quita el evento por tema de bugs (ya que esta función se puede ejecutar más de una vez)
                 this.quitarScrollInfinitoQuery(false);
-                const resp = await ofertaServicio.obtenerRecomendaciones(this.correo, this.pagina, this.tamanio);
+                const resp = await ofertaServicio.obtenerOfertasQuery(this.correo, this.pagina, this.tamanio, this.query, this.filtroComuna, this.filtroRegion, this.filtroProveedor);
                 const ofertas = resp.data;
                 const status = resp.status;
                 //Si no hay datos, se quita este evento para siempre
@@ -139,16 +149,23 @@ export default {
         },
         formatearFecha: function (fecha) {
             return formatearFechaDB(fecha);
-        }
+        },
     },
     async mounted() {
-        const query = this.$route.query.query;
+        this.query = this.$route.query.query;
+        this.filtroComuna = this.$route.query.filtroComuna;
+        this.filtroRegion = this.$route.query.filtroRegion;
+        this.filtroProveedor = this.$route.query.filtroProveedor;
+
+        
         this.correo = this.usuarioApp.correo;
-        if (query) {
-            this.titulo = 'Resultados para : "' + query + '"';
+
+        if (this.query || this.filtroComuna || this.filtroRegion || this.filtroProveedor) {
+            this.query ? this.query : this.query = this.filtroRegion + " " + this.filtroComuna + " " + this.filtroProveedor;
+            this.titulo = 'Resultados para : "' + this.query + '"';
             this.ponerScrollInfinitoQuery();
-            this.obtenerOfertasQuery(query);
-            await historialServicio.crearHistorialBusqueda(this.correo, query);
+            this.obtenerOfertasQuery();
+            await historialServicio.crearHistorialBusqueda(this.correo, this.query);
 
         } else {
             this.ponerScrollInfinitoRecomendacion();
