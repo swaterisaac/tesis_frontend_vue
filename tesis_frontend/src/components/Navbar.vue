@@ -1,17 +1,18 @@
 <template>
     <v-app-bar app color="primario">
-        <v-flex
-            class="d-flex align-center"
+        <v-btn
+            class="text-left"
             @click="goHome"
-            style="cursor: pointer">
+            text
+            color="#fff">
             <v-img
-                alt="Vuetify Logo"
+                alt="Logo de la aplicación"
                 class="shrink mr-2"
                 contain
                 src=""
                 width="40" />
-            Logo
-        </v-flex>
+            Inicio
+        </v-btn>
 
         <v-spacer></v-spacer>
         <v-menu

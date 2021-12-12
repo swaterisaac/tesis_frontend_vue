@@ -1,7 +1,12 @@
 <template>
     <v-flex>
-        <v-btn @click="login">Inicia sesión con Google</v-btn>
-        <v-btn @click="testPost">TestPost</v-btn>
+        <p class="text-center display-1">¡Crea una cuenta para obtener ofertas turísticas aptas para ti!</p>
+        <v-flex class="d-flex justify-center">
+            <v-btn @click="login">
+                <v-icon left>mdi-google</v-icon>
+                Inicia sesión con Google
+            </v-btn>
+        </v-flex>
     </v-flex>
 </template>
 
@@ -11,7 +16,6 @@ import {
     signInWithPopup,
     GoogleAuthProvider
 } from "firebase/auth";
-import axiosBackend from '../service/axiosServicio';
 import usuarioServicio from '../service/usuarioServicio';
 
 const provider = new GoogleAuthProvider();
@@ -36,23 +40,6 @@ export default {
                     console.log(error);
                 });
         },
-        async testPost() {
-            const prueba2 = {
-                'nombre': 'juan',
-                'correo': 'a@example.com',
-                'fechaNacimiento': '2000-03-29',
-                'idComuna': 9,
-                'consideraciones': [1,2,3],
-            }
-            try {
-                const resp = await axiosBackend.post('crearUsuario', prueba2)
-                console.log(resp.status);
-                console.log(resp.data);
-            } catch (error) {
-                console.log(error);
-            }
-
-        }
     },
 }
 </script>
