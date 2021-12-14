@@ -2,7 +2,8 @@
     <v-card
         class="mx-auto my-12 white--text"
         max-width="374"
-        color="rojizo">
+        color="rojizo"
+        elevation="4">
 
         <v-img height="250" src="https://cdn.vuetifyjs.com/images/cards/cooking.png"></v-img>
 

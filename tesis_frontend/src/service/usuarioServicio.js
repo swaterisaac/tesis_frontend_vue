@@ -19,6 +19,15 @@ class UsuarioServicio{
         const resp = axiosBackend.post('crearUsuario', usuario);
         return resp;
     }
+    editarUsuario(usuario){
+        try{
+            const resp = axiosBackend.put('editarUsuario', usuario);
+            return resp;
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
 }
 
 const usuarioServicio = new UsuarioServicio();

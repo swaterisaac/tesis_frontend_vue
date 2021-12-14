@@ -13,6 +13,7 @@ export default new Vuetify({
             terciario: '#a7c957',
             rojizo: '#bc4749',
             fondo: '#f2e8cf',
+            crema: '#e5d19f',
           },
         },
       },

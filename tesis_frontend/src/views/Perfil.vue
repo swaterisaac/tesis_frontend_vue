@@ -114,9 +114,12 @@
                             color="terciario"
                             class="mr-4"
                             @click="guardarDatos">
-                            <v-icon>mdi-content-save</v-icon>
+                            <v-icon>{{iconoGuardado}}</v-icon>
                             Guardar datos
                         </v-btn>
+                    </v-flex>
+                    <v-flex class="d-flex justify-end pt-4">
+                        <p :class="'body-1 ' + colorEstado">{{mensajeGuardado}}</p>
                     </v-flex>
                 </v-form>
             </v-col>
@@ -127,9 +130,11 @@
 <script>
 import ubicacionServicio from '../service/ubicacionServicio';
 import consideracionesServicio from '../service/consideracionesServicio';
+import usuarioServicio from '../service/usuarioServicio';
 import {
     formatearFechaDB
 } from '../helpers/fecha';
+
 export default {
     name: "Perfil",
     props: ['usuarioApp', 'usuarioFirebase'],
@@ -138,6 +143,8 @@ export default {
             //Cargas y activaciones
             cargarUsuario: true,
             cargarComunas: false,
+            cargarGuardado: false,
+            iconoGuardado: 'mdi-content-save',
             deshabilitarComunas: false,
 
             //Datos helpers
@@ -147,6 +154,8 @@ export default {
             servidorError: false,
             comunaAntigua: null,
             consideracionesMedicasAntiguas: null,
+            mensajeGuardado: '',
+            colorEstado: '',
 
             //Datos del usuario
             nombreCompleto: '',
@@ -242,12 +251,24 @@ export default {
                 const auxConsiAntigua = [...this.consideracionesMedicasAntiguas];
                 const nuevosDatos = {
                     'nombre': this.nombreCompleto === this.usuarioApp.nombre ? '' : this.nombreCompleto,
-                    'correo': this.correo === this.usuarioApp.correo ? '' : this.correo,
+                    'correo': this.usuarioApp.correo,
                     'fechaNacimiento': this.fechaNacimiento,
-                    'idComuna': this.comuna === this.comunaAntigua[0].id ? '' : this.comuna,
-                    'consideraciones': JSON.stringify(auxConsi) === JSON.stringify(auxConsiAntigua) ? '' : this.consideracionesMedicas,
+                    'idComuna': this.comuna === this.comunaAntigua[0].id ? 0 : this.comuna,
+                    'consideraciones': JSON.stringify(auxConsi) === JSON.stringify(auxConsiAntigua) ? [] : this.consideracionesMedicas,
                 };
-                console.log(nuevosDatos);
+                this.cargarGuardado = true;
+                const resp = await usuarioServicio.editarUsuario(nuevosDatos);
+                if (resp.status === 200){
+                    this.colorEstado = "green--text text--darken-4"
+                    this.iconoGuardado = "mdi-check-bold";
+                    this.mensajeGuardado = "¡Tu perfil se ha guardado con éxito!";
+                }
+                else{
+                    this.colorEstado = "red--text text--darken-4"
+                    this.iconoGuardado = "mdi-alert-circle";
+                    this.mensajeGuardado = "Hay un error con el servidor, inténtalo más tarde.";
+                }
+                this.cargarGuardado = false;
             }
         },
     },
