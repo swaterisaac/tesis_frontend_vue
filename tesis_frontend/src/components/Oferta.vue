@@ -5,7 +5,7 @@
         color="rojizo"
         elevation="4">
 
-        <v-img height="250" src="https://cdn.vuetifyjs.com/images/cards/cooking.png"></v-img>
+        <v-img height="250" :src="imagenOferta ? imagenOferta:imagenRegion"></v-img>
 
         <v-card-title class="d-flex justify-center display-1 ">{{this.titulo}}</v-card-title>
         <v-divider dark class="mx-4"></v-divider>
@@ -64,9 +64,18 @@ export default {
             default: sinFecha,
         },
         precio: {
-            type: Number,
-            default: 0,
+            type: String,
+            default: "",
         },
+        imagenRegion: {
+            type: String,
+            default: "https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        },
+        imagenOferta: {
+            type: String,
+            default: "",
+        }
+
     },
     computed:{
         ubicacion: function(){

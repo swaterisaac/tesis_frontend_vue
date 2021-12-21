@@ -31,7 +31,7 @@ export default {
                     const res = await usuarioServicio.obtenerUsuarioPorCorreo(user.email);
                     const status = res.status;
                     if (status === 204) {
-                        this.$router.push('/registro').catch(() => {});
+                        window.location.href = "/registro";
                     } else if (status === 200) {
                         window.location.href = "/";
                     }

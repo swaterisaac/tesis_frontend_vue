@@ -13,7 +13,9 @@
                     :region="oferta.region"
                     :fechaInicio="formatearFecha(oferta.fecha_inicio)"
                     :fechaFinal="formatearFecha(oferta.fecha_final)"
-                    :precio="oferta.precio"></oferta>
+                    :precio="oferta.precio"
+                    :imagenRegion="oferta.imagen_region"
+                    :imagenOferta="oferta.imagen_oferta.String"></oferta>
             </v-col>
         </v-row>
         <sin-datos :mensaje="mensajeFinal" :activado="finalDatos"></sin-datos>

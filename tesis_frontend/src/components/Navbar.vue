@@ -10,7 +10,7 @@
                 class="shrink mr-2"
                 contain
                 src=""
-                width="40" />
+                width="40"/>
             Inicio
         </v-btn>
 
@@ -109,16 +109,9 @@
             text
             @click="cerrarSesion"
             color="#fff"
-            v-if="login">
+            v-if="login || enRegistro">
             <v-icon large left>mdi-logout</v-icon>
             <span class="mr-2">Cerrar sesión</span>
-        </v-btn>
-        <v-btn
-            text
-            @click="goTest"
-            color="#fff">
-            <v-icon large left>mdi-test-tube-empty</v-icon>
-            <span class="mr-2">Test</span>
         </v-btn>
     </v-app-bar>
 </template>
@@ -150,6 +143,11 @@ export default {
             menuFiltro: false,
         }
     },
+    computed:{
+        enRegistro(){
+            return this.$route.name === 'Registro'
+        }
+    },
     props: ['usuarioApp', 'usuarioFirebase'],
     async mounted() {
         if (this.usuarioApp && this.usuarioFirebase) {
@@ -168,10 +166,6 @@ export default {
         goHome: function () {
             this.$router.push("/").catch(() => {});
             location.reload();
-        },
-        goTest: function () {
-            console.log(this.usuarioFirebase, this.usuarioApp);
-            //this.$router.push("/test").catch(() => {});
         },
         goProfile: function () {
             this.$router.push("/perfil").catch(() => {});

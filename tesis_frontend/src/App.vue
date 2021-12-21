@@ -3,7 +3,10 @@
         <navbar :usuarioFirebase="usuarioFirebase" :usuarioApp="usuarioApp"></navbar>
         <v-main :style="{background: $vuetify.theme.themes[theme].fondo}">
             <v-container fluid>
-                <router-view :usuarioFirebase="usuarioFirebase" :usuarioApp="usuarioApp" />
+                <router-view v-if="!errorBackend" :usuarioFirebase="usuarioFirebase" :usuarioApp="usuarioApp" />
+                <v-flex v-else>
+                    <p class="text-center display-3">Hay un error en el servidor, intente más tarde.</p>
+                </v-flex>
             </v-container>
         </v-main>
     </v-app>
@@ -28,17 +31,22 @@ export default {
         usuarioFirebase: undefined,
         usuarioApp: undefined,
         appCreated: false,
+        errorBackend: false,
     }),
     async created() {
         const auth = getAuth();
         this.usuarioFirebase = auth.currentUser;
         if (this.usuarioFirebase) {
-            const resp = await usuarioServicio.obtenerUsuarioPorCorreo(this.usuarioFirebase.email);
-            if (resp.status === 200) {
-                this.usuarioApp = resp.data;
+            try {
+                const resp = await usuarioServicio.obtenerUsuarioPorCorreo(this.usuarioFirebase.email);
+                if (resp.status === 200) {
+                    this.usuarioApp = resp.data;
+                } else if (resp.status === 204) {
+                    this.$router.push("/registro");
+                }
             }
-            else if(resp.status === 204){
-                this.$router.push("/registro");
+            catch(error){
+                this.errorBackend = true;
             }
         }
         this.appCreated = true;
