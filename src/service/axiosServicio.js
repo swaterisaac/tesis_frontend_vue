@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const axiosBackend = axios.create({
-    //baseURL: 'http://localhost:3632/',
-    baseURL: 'https://isaacrojas-tesis-backend.herokuapp.com/',
+    baseURL: process.env.BACKEND_URL || 'http://localhost:3632/',
 });
 
 export default axiosBackend;
