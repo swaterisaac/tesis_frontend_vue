@@ -1,20 +1,15 @@
 import axiosBackend from "./axiosServicio";
 
 class OfertaServicio{
-    obtenerRecomendaciones(correo, pagina, tamanio){
-        try{
-            const res = axiosBackend.get('ofertas', {
-                params: {
-                    correo: correo,
-                    pagina: pagina,
-                    tamanio: tamanio,
-                }
-            });
-            return res;
-        }
-        catch(error){
-            console.log(error);
-        }
+    obtenerRecomendaciones(correo, pagina, tamanio){        
+        const res = axiosBackend.get('ofertas', {
+            params: {
+                correo: correo,
+                pagina: pagina,
+                tamanio: tamanio,
+            }
+        });
+        return res;
     }
 
     obtenerOfertasQuery(correo, pagina, tamanio, query, filtroComuna, filtroRegion, filtroProveedor){

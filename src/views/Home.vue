@@ -2,6 +2,7 @@
     <v-flex>
         <div class="text-center display-2">{{titulo}}</div>
         <v-row>
+            <mensaje-error :activado="hayError"></mensaje-error>
             <v-col
                 cols="4"
                 v-for="oferta in ofertas"
@@ -28,6 +29,7 @@ import ofertaServicio from "../service/ofertaServicio"
 import Oferta from '../components/Oferta'
 import CirculoDeCarga from '../components/CirculoDeCarga.vue';
 import SinDatos from '../components/SinDatos.vue';
+import MensajeError from '../components/MensajeError.vue';
 import {
     formatearFechaDB
 } from '../helpers/fecha';
@@ -39,6 +41,7 @@ export default {
         Oferta,
         CirculoDeCarga,
         SinDatos,
+        MensajeError,
     },
     props: ['usuarioApp', 'usuarioFirebase'],
     data() {
@@ -55,6 +58,7 @@ export default {
             filtroRegion: '',
             filtroProveedor: '',
             //Helpers
+            hayError: false,
             finalDatos: false,
             //Cargas y habilitadores
             cargarDatos: false,
@@ -67,12 +71,16 @@ export default {
         //Ofertas de recomendación
         async obtenerOfertas() {
             this.cargarDatos = true;
-            const resp = await ofertaServicio.obtenerRecomendaciones(this.correo, this.pagina, this.tamanio);
-            this.ofertas = resp.data;
-            this.pagina += 1;
+            try{
+                const resp = await ofertaServicio.obtenerRecomendaciones(this.correo, this.pagina, this.tamanio);
+                this.ofertas = resp.data;
+                this.pagina += 1;
+            }
+            catch(error){
+                this.hayError = true;
+                console.log("Hay un error.");
+            }
             this.cargarDatos = false;
-
-            console.log("DatosRecomendacion: ", resp.data);
         },
         ponerScrollInfinitoRecomendacion: function () {
             window.addEventListener('scroll', this.recargarOfertas);

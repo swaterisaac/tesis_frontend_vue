@@ -5,7 +5,7 @@
             <v-container fluid>
                 <router-view v-if="!errorBackend" :usuarioFirebase="usuarioFirebase" :usuarioApp="usuarioApp" />
                 <v-flex v-else>
-                    <p class="text-center display-3">Hay un error en el servidor, intente más tarde.</p>
+                    <p class="text-center display-3">Hay un error en el servidor, por favor, intente más tarde.</p>
                 </v-flex>
             </v-container>
         </v-main>
