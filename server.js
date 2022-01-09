@@ -13,4 +13,5 @@ app.get(/.*/, function (req, res) {
 })
 
 const port = process.env.PORT || 8080
+console.log(process.env)
 app.listen(port)
