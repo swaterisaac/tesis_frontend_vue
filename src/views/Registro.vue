@@ -191,8 +191,6 @@ export default {
 
         const respConsideraciones = await consideracionesServicio.obtenerConsideracionesMedicas();
         this.consideraciones = respConsideraciones.data;
-        console.log(this.regiones);
-        console.log(this.consideraciones);
     },
     methods: {
         async traerComunas() {
@@ -224,7 +222,6 @@ export default {
                 };
                 const resp = await usuarioServicio.crearUsuario(nuevoUsuario);
                 if(resp.status !== 200){
-                    console.log(resp.data)
                     this.servidorError = true;
                 }
                 else{

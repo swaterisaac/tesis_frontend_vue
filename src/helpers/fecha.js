@@ -1,4 +1,7 @@
 export function formatearFechaDB(fecha){
+    if(!fecha){
+        return "Indefinido"
+    }
     let fechaAux = new Date(fecha)
     let fechaFormateada = new Date(fechaAux.valueOf() + fechaAux.getTimezoneOffset() * 60000);
     let dia = fechaFormateada.getDate();

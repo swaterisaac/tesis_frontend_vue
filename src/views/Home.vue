@@ -13,8 +13,8 @@
                     :comuna="oferta.comuna"
                     :region="oferta.region"
                     :fechaInicio="formatearFecha(oferta.fecha_inicio)"
-                    :fechaFinal="formatearFecha(oferta.fecha_final)"
-                    :precio="oferta.precio"
+                    :fechaFinal="formatearFecha(oferta.fecha_final.String)"
+                    :precio="oferta.precio.String"
                     :imagenRegion="oferta.imagen_region"
                     :imagenOferta="oferta.imagen_oferta.String"></oferta>
             </v-col>
