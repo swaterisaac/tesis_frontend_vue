@@ -6,5 +6,4 @@ const firebaseConfig = {
     messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID|| "",
     appId: process.env.VUE_APP_APP_ID || ""
 }
-console.log(process.env)
 export default firebaseConfig;
