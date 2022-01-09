@@ -7,4 +7,5 @@ const firebaseConfig = {
     appId: process.env.APP_ID || ""
 }
 console.log(process.env)
+console.log(process.env.VUE_APP_PRUEBA)
 export default firebaseConfig;
