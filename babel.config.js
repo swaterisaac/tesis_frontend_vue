@@ -7,7 +7,8 @@ module.exports = function(api){
     env: {
       development: {
         plugins: [["inline-dotenv",{
-          path: '.env.development'
+          path: '.env.development',
+          systemVar: 'overwrite',
         }]]
       }
     }
