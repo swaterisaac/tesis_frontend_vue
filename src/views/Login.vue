@@ -35,7 +35,6 @@ export default {
                     } else if (status === 200) {
                         window.location.href = "/";
                     }
-                    console.log(user);
                 }).catch((error) => {
                     console.log(error);
                 });

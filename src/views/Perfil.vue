@@ -134,6 +134,7 @@ import usuarioServicio from '../service/usuarioServicio';
 import {
     formatearFechaDB
 } from '../helpers/fecha';
+import reglasValidadoras from '../helpers/reglas';
 
 export default {
     name: "Perfil",
@@ -172,23 +173,11 @@ export default {
             consideraciones: [],
 
             //Reglas
-            reglasNombre: [
-                v => !!v || 'Debe ingresar su nombre completo.',
-                v => !!v && v.length < 150 || 'Su nombre debe ser de menos de 150 carácteres',
-            ],
-            reglasCorreo: [
-                v => !!v || 'Debe ingresar su correo',
-                v => /.+@.+\..+/.test(v) || 'El correo debe tener el formato nombre@gmail.com',
-            ],
-            reglasFechaNacimiento: [
-                v => !!v || 'Debe ingresar su fecha de nacimiento',
-            ],
-            reglasRegion: [
-                v => !!v || 'Debe ingresar una región',
-            ],
-            reglasComuna: [
-                v => !!v || 'Debe ingresar una comuna',
-            ],
+            reglasNombre: reglasValidadoras.nombre.reglas,
+            reglasCorreo: reglasValidadoras.correo.reglas,
+            reglasFechaNacimiento: reglasValidadoras.fechaNacimiento.reglas,
+            reglasRegion: reglasValidadoras.region.reglas,
+            reglasComuna: reglasValidadoras.comuna.reglas,
         }
     },
     async mounted() {

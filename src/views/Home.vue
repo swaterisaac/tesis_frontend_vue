@@ -78,9 +78,9 @@ export default {
             }
             catch(error){
                 this.hayError = true;
-                console.log("Hay un error.");
             }
             this.cargarDatos = false;
+            console.log(this.ofertas);
         },
         ponerScrollInfinitoRecomendacion: function () {
             window.addEventListener('scroll', this.recargarOfertas);
@@ -123,7 +123,7 @@ export default {
             this.pagina += 1;
             this.cargarDatos = false;
 
-            console.log("DatosQuery: ", resp.data);
+            //console.log("DatosQuery: ", resp.data);
         },
         ponerScrollInfinitoQuery: function () {
             window.addEventListener('scroll', this.recargarOfertasQuery);
