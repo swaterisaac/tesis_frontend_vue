@@ -10,7 +10,7 @@
                 class="shrink mr-2"
                 contain
                 src=""
-                width="40"/>
+                width="40" />
             Inicio
         </v-btn>
 
@@ -87,7 +87,8 @@
                 class="pt-5"
                 rounded
                 v-model="query"
-                v-if="login"></v-text-field>
+                v-if="login"
+                @keydown.enter.prevent="ejecutarQuery"></v-text-field>
         </v-responsive>
         <div class="px-2" v-if="login">
             <v-btn
@@ -143,8 +144,8 @@ export default {
             menuFiltro: false,
         }
     },
-    computed:{
-        enRegistro(){
+    computed: {
+        enRegistro() {
             return this.$route.name === 'Registro'
         }
     },
