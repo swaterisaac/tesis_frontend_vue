@@ -74,7 +74,12 @@ export default {
             try{
                 const resp = await ofertaServicio.obtenerRecomendaciones(this.correo, this.pagina, this.tamanio);
                 this.ofertas = resp.data;
-                this.pagina += 1;
+                if(resp.status === 204){
+                    this.finalDatos = true;
+                }
+                else{
+                    this.pagina += 1;
+                }
             }
             catch(error){
                 this.hayError = true;
