@@ -9,7 +9,9 @@
         <v-form
             ref="form"
             v-model="valid"
-            lazy-validation>
+            lazy-validation
+            @submit.prevent="registrarse"
+            >
             <v-row justify="center">
                 <v-col
                     cols="12"
@@ -113,7 +115,9 @@
                             :disabled="!valid"
                             color="terciario"
                             class="mr-4"
-                            @click="registrarse">
+                            type="submit"
+                            :loading="cargarRegistro"
+                            >
                             Registrarse
                         </v-btn>
                     </v-flex>
@@ -137,6 +141,7 @@ export default {
             //Cargas y activaciones
             cargarUsuario: true,
             cargarComunas: false,
+            cargarRegistro: false,
             deshabilitarComunas: true,
 
             //Datos helpers
@@ -202,6 +207,7 @@ export default {
         },
         async registrarse() {
             if (this.$refs.form.validate()) {
+                this.cargarRegistro = true;
                 const nuevoUsuario = {
                     'nombre': this.nombreCompleto,
                     'correo': this.correo,
@@ -210,6 +216,7 @@ export default {
                     'consideraciones': this.consideracionesMedicas,
                 };
                 const resp = await usuarioServicio.crearUsuario(nuevoUsuario);
+                this.cargarRegistro = false;
                 if(resp.status !== 200){
                     this.servidorError = true;
                 }
