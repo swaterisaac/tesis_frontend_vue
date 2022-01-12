@@ -52,7 +52,7 @@
               </p>
               <p class="text-left title font-weight-regular">
                 <b>Fecha de término: </b
-                >{{ formatearFecha(oferta.fecha_final) }}
+                >{{ formatearFecha(oferta.fecha_final.String) }}
               </p>
 
               <p
