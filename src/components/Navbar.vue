@@ -165,8 +165,7 @@ export default {
     },
     methods: {
         goHome: function () {
-            this.$router.push("/").catch(() => {});
-            location.reload();
+            window.location.href = "/";
         },
         goProfile: function () {
             this.$router.push("/perfil").catch(() => {});
