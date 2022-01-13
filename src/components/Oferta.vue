@@ -7,7 +7,7 @@
 
         <v-img height="250" :src="imagenOferta ? imagenOferta:imagenRegion"></v-img>
 
-        <v-card-title class="d-flex justify-center display-1 ">{{this.titulo}}</v-card-title>
+        <v-card-title class="d-flex justify-center display-1" style="word-break: break-word;">{{this.titulo}}</v-card-title>
         <v-divider dark class="mx-4"></v-divider>
         <v-card-text class="white--text">
 
