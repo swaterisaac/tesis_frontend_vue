@@ -1,6 +1,6 @@
 <template>
     <v-flex>
-        <div class="text-center display-2">{{titulo}}</div>
+        <div class="text-center display-2" :aria-label="titulo + ', cuando llegue al final de la página navegue con la flecha hacia abajo para tener más ofertas'" tabindex="0">{{titulo}}</div>
         <v-row>
             <mensaje-error :activado="hayError"></mensaje-error>
             <v-col
@@ -19,7 +19,7 @@
                     :imagenOferta="oferta.imagen_oferta.String"></oferta>
             </v-col>
         </v-row>
-        <sin-datos :mensaje="mensajeFinal" :activado="finalDatos"></sin-datos>
+        <sin-datos :mensaje="mensajeFinal" :activado="finalDatos" tabindex="0"></sin-datos>
         <circulo-de-carga :activado="this.cargarDatos"></circulo-de-carga>
     </v-flex>
 </template>

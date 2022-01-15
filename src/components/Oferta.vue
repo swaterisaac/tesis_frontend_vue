@@ -3,23 +3,24 @@
         class="mx-auto my-12 white--text"
         max-width="374"
         color="rojizo"
-        elevation="4">
+        elevation="4"
+        tabindex="0">
 
         <v-img height="250" :src="imagenOferta ? imagenOferta:imagenRegion"></v-img>
 
-        <v-card-title class="d-flex justify-center display-1" style="word-break: break-word;">{{this.titulo}}</v-card-title>
+        <v-card-title class="d-flex justify-center display-1" style="word-break: break-word;" :aria-label="this.titulo">{{this.titulo}}</v-card-title>
         <v-divider dark class="mx-4"></v-divider>
         <v-card-text class="white--text">
 
-            <div class="my-4 headline text-center">
+            <div class="my-4 headline text-center" :aria-label="'Ubicación: ' + this.ubicacion">
                 {{this.ubicacion}}
             </div>
 
-            <div class="body-1">Válido desde:</div>
-            <div class="body-1">{{this.fecha}}</div>
+            <div class="body-1" aria-label="Válido desde: ">Válido desde:</div>
+            <div class="body-1" :aria-label="this.fecha">{{this.fecha}}</div>
         </v-card-text>
 
-        <v-card-title>Precio: ${{this.precio}}</v-card-title>
+        <v-card-title :aria-label="'Precio: ' + this.precio">Precio: ${{this.precio}}</v-card-title>
 
         <v-card-actions class="d-flex justify-end align-center">
             <v-btn

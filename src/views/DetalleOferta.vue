@@ -6,7 +6,7 @@
           <v-icon>mdi-arrow-left</v-icon>
           Volver
         </v-btn>
-        <p class="text-center display-2">
+        <p class="text-center display-2" tabindex="0">
           Oferta turística {{ oferta.nombre }}
         </p>
       </v-flex>
@@ -19,72 +19,83 @@
         <v-col cols="6">
           <v-card class="pa-4" outlined shaped color="terciario">
             <v-card class="pa-4" outlined shaped color="fondo">
-              <p
-                class="
-                  text-center
-                  headline
-                  text-decoration-underline
-                  font-weight-bold
-                "
-              >
-                Ubicación
-              </p>
-              <p class="text-left title font-weight-regular">
-                <b>Región: </b>{{ oferta.region }}
-              </p>
-              <p class="text-left title font-weight-regular">
-                <b>Comuna: </b>{{ oferta.comuna }}
-              </p>
-
-              <p
-                class="
-                  text-center
-                  headline
-                  text-decoration-underline
-                  font-weight-bold
-                "
-              >
-                Fechas
-              </p>
-              <p class="text-left title font-weight-regular">
-                <b>Fecha de inicio: </b
-                >{{ formatearFecha(oferta.fecha_inicio) }}
-              </p>
-              <p class="text-left title font-weight-regular">
-                <b>Fecha de término: </b
-                >{{ formatearFecha(oferta.fecha_final.String) }}
-              </p>
-
-              <p
-                class="
-                  text-center
-                  headline
-                  text-decoration-underline
-                  font-weight-bold
-                "
-              >
-                General
-              </p>
-              <p class="text-left title font-weight-regular">
-                <b>Precio: </b>{{ oferta.precio.String }}
-              </p>
-              <p class="text-left title font-weight-regular">
-                <b>Proveedor: </b>{{ oferta.proveedor }}
-              </p>
-              <p class="text-left title font-weight-regular">
-                <b>Consideraciones Médicas:</b>
-              </p>
-              <ol v-if="existenConsideraciones">
-                <li
-                  v-for="consideracion in consideraciones"
-                  :key="consideracion.id"
+              <div tabindex="0">
+                <p class="display-2 text-center">
+                  Información general
+                </p>
+                <p
+                  class="
+                    text-center
+                    headline
+                    text-decoration-underline
+                    font-weight-bold
+                  "
                 >
-                  <p class="text-left title font-weight-regular">
-                    {{ consideracion.nombre }}
-                  </p>
-                </li>
-              </ol>
-              <p v-else class="text-left title font-weight-regular">Ninguna</p>
+                  Ubicación
+                </p>
+                <p class="text-left title font-weight-regular">
+                  <b>Región: </b>{{ oferta.region }}
+                </p>
+                <p class="text-left title font-weight-regular">
+                  <b>Comuna: </b>{{ oferta.comuna }}
+                </p>
+              </div>
+              <div tabindex="0">
+                <p
+                  class="
+                    text-center
+                    headline
+                    text-decoration-underline
+                    font-weight-bold
+                  "
+                >
+                  Fechas
+                </p>
+                <p class="text-left title font-weight-regular">
+                  <b>Fecha de inicio: </b
+                  >{{ formatearFecha(oferta.fecha_inicio) }}
+                </p>
+                <p class="text-left title font-weight-regular">
+                  <b>Fecha de término: </b
+                  >{{ formatearFecha(oferta.fecha_final.String) }}
+                </p>
+              </div>
+              <div tabindex="0">
+                <p
+                  class="
+                    text-center
+                    headline
+                    text-decoration-underline
+                    font-weight-bold
+                  "
+                >
+                  General
+                </p>
+                <p class="text-left title font-weight-regular">
+                  <b>Precio: </b>{{ oferta.precio.String }}
+                </p>
+                <p class="text-left title font-weight-regular">
+                  <b>Proveedor: </b>{{ oferta.proveedor }}
+                </p>
+              </div>
+              <div tabindex="0">
+                <p class="text-left title font-weight-regular">
+                  <b>Consideraciones Médicas:</b>
+                </p>
+                <ol v-if="existenConsideraciones">
+                  <li
+                    v-for="consideracion in consideraciones"
+                    :key="consideracion.id"
+                  >
+                    <p class="text-left title font-weight-regular">
+                      {{ consideracion.nombre }}
+                    </p>
+                  </li>
+                </ol>
+                <p v-else class="text-left title font-weight-regular">
+                  Ninguna
+                </p>
+              </div>
             </v-card>
           </v-card>
         </v-col>
@@ -93,18 +104,9 @@
         <v-col cols="12">
           <v-card class="pa-4" outlined shaped color="terciario">
             <v-card class="pa-4" outlined shaped color="fondo">
-              <v-row>
+              <v-row tabindex="0">
                 <v-col cols="12">
-                  <p
-                    class="
-                      text-center
-                      headline
-                      text-decoration-underline
-                      font-weight-bold
-                    "
-                  >
-                    Contacto
-                  </p>
+                  <p class="text-center display-2">Contacto</p>
                 </v-col>
                 <v-col cols="6">
                   <p class="text-left title font-weight-regular">
@@ -123,11 +125,14 @@
                   </p>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row tabindex="0">
                 <v-col cols="12">
                   <div class="text-left headline font-weight-bold">
                     <v-icon>mdi-map-marker</v-icon>
-                    Ubicación oferta: <b class="text-left headline font-weight-regular">{{oferta.ubicacion.String || 'No hay ubicación específica'}}</b>
+                    Ubicación oferta:
+                    <b class="text-left headline font-weight-regular">{{
+                      oferta.ubicacion.String || "No hay ubicación específica"
+                    }}</b>
                   </div>
                 </v-col>
               </v-row>

@@ -4,7 +4,8 @@
             class="text-left"
             @click="goHome"
             text
-            color="#fff">
+            color="#fff"
+            aria-label="Presiona aquí para ir al inicio">
             <v-img
                 alt="Logo de la aplicación"
                 class="shrink mr-2"
@@ -26,7 +27,8 @@
                     text
                     color="#fff"
                     v-bind="attrs"
-                    v-on="on">
+                    v-on="on"
+                    aria-label="Filtros, active los filtros y luego navegue hasta el final">
                     <span class="mr-2">Filtros</span>
                     <v-icon large right>mdi-filter-variant</v-icon>
                 </v-btn>
@@ -46,7 +48,8 @@
                         return-object
                         v-model="filtroRegion"
                         @change="traerComunas()"
-                        label="Región"></v-autocomplete>
+                        label="Región"
+                        aria-label="Estás en filtros, ingresa una región"></v-autocomplete>
                     <v-autocomplete
                         rounded
                         filled
@@ -73,7 +76,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn text @click="menuFiltro = false">
+                    <v-btn text @click="menuFiltro = false" aria-label="Cerrar filtros">
                         Cerrar
                     </v-btn>
                 </v-card-actions>
@@ -83,6 +86,7 @@
             <v-text-field
                 append-icon="mdi-magnify"
                 placeholder="Busca ofertas turísticas"
+                aria-label="Escribe aquí para buscar ofertas turísticas"
                 background-color="#fff"
                 class="pt-5"
                 rounded

@@ -1,6 +1,6 @@
 <template>
     <v-flex>
-        <p class="text-center display-1">¡Crea una cuenta para obtener ofertas turísticas aptas para ti!</p>
+        <p class="text-center display-1" tabindex="0">¡Crea una cuenta para obtener ofertas turísticas aptas para ti!</p>
         <v-flex class="d-flex justify-center">
             <v-btn @click="login">
                 <v-icon left>mdi-google</v-icon>
