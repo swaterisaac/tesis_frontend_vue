@@ -50,6 +50,8 @@
             prepend-icon="mdi-calendar"
             :rules="reglasFechaNacimiento"
             type="date"
+            :min="fechaMinima"
+            :max="fechaHoy"
           ></v-text-field>
 
           <v-select
@@ -96,6 +98,11 @@
             item-value="id"
             label="Buscar consideraciones médicas"
           ></v-autocomplete>
+          <v-alert dismissible shaped color="primario" type="info" class="body-1"
+            >Las consideraciones médicas se ingresan para que aparezcan
+            prioritariamente ofertas turísticas que puedan cumplir con tus
+            condiciones de salud</v-alert
+          >
           <v-flex class="d-flex justify-end">
             <v-btn
               :disabled="!valid"
@@ -127,7 +134,7 @@
 import ubicacionServicio from "../service/ubicacionServicio";
 import consideracionesServicio from "../service/consideracionesServicio";
 import usuarioServicio from "../service/usuarioServicio";
-import { formatearFechaInput } from "../helpers/fecha";
+import { obtenerFechaMinima, formatearFechaInput, obtenerFechaHoy } from "../helpers/fecha";
 import reglasValidadoras from "../helpers/reglas";
 
 export default {
@@ -144,6 +151,8 @@ export default {
       apareceMensajeGuardado: false,
 
       //Datos helpers
+      fechaMinima: obtenerFechaMinima(),
+      fechaHoy: obtenerFechaHoy(),
       activePicker: null,
       valid: false,
       menu: false,
@@ -176,7 +185,6 @@ export default {
     };
   },
   async mounted() {
-    console.log(this.usuarioApp);
     //Colocando datos del usuario
     this.nombreCompleto = this.usuarioApp.nombre;
     this.region = this.usuarioApp.region;

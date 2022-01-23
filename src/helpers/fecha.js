@@ -31,3 +31,12 @@ export function formatearFechaInput(fecha){
     }
     return fechaFormateada.getFullYear() + "-" + mes + "-" + dia;
 }
+export function obtenerFechaMinima(){
+    return "1900-01-01";
+}
+export function obtenerFechaHoy(){
+    let fechaHoy = new Date();
+    const dia = fechaHoy.getDate() < 10 ? `0${fechaHoy.getDate()}` : fechaHoy.getDate();
+    const mes = fechaHoy.getMonth() + 1 < 10 ? `0${fechaHoy.getMonth() + 1}` : fechaHoy.getMonth() + 1; 
+    return `${fechaHoy.getFullYear()}-${mes}-${dia}`;
+}

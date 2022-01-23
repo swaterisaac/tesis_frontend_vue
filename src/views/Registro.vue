@@ -47,6 +47,8 @@
             label="Fecha de nacimiento"
             prepend-icon="mdi-calendar"
             :rules="reglasFechaNacimiento"
+            :min="fechaMinima"
+            :max="fechaHoy"
             type="date"
           ></v-text-field>
 
@@ -79,6 +81,7 @@
             :rules="reglasComuna"
             :label="tituloComuna"
           ></v-autocomplete>
+
           <v-autocomplete
             rounded
             filled
@@ -94,6 +97,11 @@
             item-value="id"
             label="Buscar consideraciones médicas"
           ></v-autocomplete>
+          <v-alert shaped color="primario" type="info" class="body-1"
+            >Las consideraciones médicas se ingresan para que aparezcan
+            prioritariamente ofertas turísticas que puedan cumplir con tus
+            condiciones de salud</v-alert
+          >
           <v-flex class="d-flex justify-end">
             <v-btn
               :disabled="!valid"
@@ -116,6 +124,7 @@ import ubicacionServicio from "../service/ubicacionServicio";
 import consideracionesServicio from "../service/consideracionesServicio";
 import usuarioServicio from "../service/usuarioServicio";
 import reglasValidadoras from "../helpers/reglas";
+import { obtenerFechaMinima, obtenerFechaHoy } from "../helpers/fecha";
 
 export default {
   name: "Registro",
@@ -129,6 +138,8 @@ export default {
       deshabilitarComunas: true,
 
       //Datos helpers
+      fechaMinima: obtenerFechaMinima(),
+      fechaHoy: obtenerFechaHoy(),
       tituloComuna: "Comuna (Seleccione una región primero)",
       activePicker: null,
       valid: false,
@@ -202,7 +213,7 @@ export default {
         }
       }
     },
-  }
+  },
 };
 </script>
 
