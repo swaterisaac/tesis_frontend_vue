@@ -78,11 +78,11 @@
                   <b>Proveedor: </b>{{ oferta.proveedor }}
                 </p>
               </div>
-              <div tabindex="0">
+              <div tabindex="0" v-if="existenConsideraciones">
                 <p class="text-left title font-weight-regular">
-                  <b>Consideraciones Médicas:</b>
+                  <b>Esta oferta turística tiene en cuenta las siguientes consideraciones médicas:</b>
                 </p>
-                <ol v-if="existenConsideraciones">
+                <ol>
                   <li
                     v-for="consideracion in consideraciones"
                     :key="consideracion.id"
@@ -92,8 +92,10 @@
                     </p>
                   </li>
                 </ol>
-                <p v-else class="text-left title font-weight-regular">
-                  Ninguna
+              </div>
+              <div v-else>
+                <p class="text-left title font-weight-regular">
+                  Esta oferta no tiene en cuenta ninguna consideración médica.
                 </p>
               </div>
             </v-card>
