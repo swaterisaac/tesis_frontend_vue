@@ -122,7 +122,6 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           text
-          @click="goProfile"
           color="#fff"
           v-if="login || enRegistro"
           v-on="on"
