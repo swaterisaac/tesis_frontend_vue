@@ -43,6 +43,8 @@
             v-for="(region, i) in regiones"
             :key="i"
             :src="region.url_imagen"
+            :aria-label="region.nombre"
+            :alt="region.nombre"
           >
             <v-row class="fill-height" align="end" justify="center">
               <v-card color="rgb(255, 255, 255, 0.6)">
