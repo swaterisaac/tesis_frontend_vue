@@ -183,7 +183,7 @@ export default {
       );
     if (respConsideraciones.status === 200) {
       this.consideraciones = respConsideraciones.data;
-      this.existenConsideraciones = true;
+      this.existenConsideraciones = this.consideraciones.length > 0 ? true : false;
     }
   },
   methods: {
